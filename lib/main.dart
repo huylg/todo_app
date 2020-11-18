@@ -1,6 +1,6 @@
+import 'package:todo_app/network/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app/ui/login/login_signup_page.dart';
-
+import 'package:todo_app/ui/root/root_page.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget{
@@ -12,7 +12,8 @@ class MyApp extends StatelessWidget{
                 theme: ThemeData(
                         primarySwatch: Colors.blue,
                 ),
-                home: LoginSignupPage(),
-        );
+                home: RootPage(
+                        auth: Auth(),
+                )        );
     }
 }

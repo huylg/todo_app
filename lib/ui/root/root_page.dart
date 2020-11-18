@@ -1,3 +1,5 @@
+import 'package:todo_app/ui/login/login_signup_page.dart';
+import 'package:todo_app/ui/main/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/network/firebase_auth.dart';
 class RootPage extends StatefulWidget{
@@ -51,15 +53,28 @@ void logoutCallBack(){
     String _userId;
     AuthStatus status = AuthStatus.NOT_DETERTMINED;
 
+    @override
+    void initState(){
+
+        print(widget.auth.currentUser.then((user){
+            setState(() {
+                          status = (user == null || user.uid.isEmpty)? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
+                          print(status);
+                        });
+        }));
+
+    }
+
     @override build(BuildContext context){
     switch(status){
         case AuthStatus.NOT_DETERTMINED:
             return builWaitingScreen();
             break;
         case AuthStatus.NOT_LOGGED_IN:
-            
+            return LoginSignupPage(auth: Auth(),callback: loginCallBack); 
             break;
         case AuthStatus.LOGGED_IN:
+            return HomePage(auth: Auth(), loggoutCallBack: logoutCallBack,);
             break;
         default:
             return builWaitingScreen();
@@ -68,8 +83,12 @@ void logoutCallBack(){
     }
 
     Widget builWaitingScreen() {
-        return Center(
+        return Scaffold(
+                
+                appBar: AppBar(title: Text('Todo app')),
+               body: Center(
                 child: CircularProgressIndicator(),
+        )
         );
     }
 
