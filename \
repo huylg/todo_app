@@ -2,6 +2,7 @@ import 'package:todo_app/ui/login/login_signup_page.dart';
 import 'package:todo_app/ui/main/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/network/firebase_auth.dart';
+import 'package:todo_app/repo/todo_repo.dart';
 
 class RootPage extends StatefulWidget {
   final BaseAuth auth;
@@ -69,7 +70,7 @@ class _RootPageState extends State<RootPage> {
         return LoginSignupPage(auth: Auth(), callback: loginCallBack);
         break;
       case AuthStatus.LOGGED_IN:
-        return HomePage(
+                return HomePage(
           auth: Auth(),
           loggoutCallBack: logoutCallBack,
         );

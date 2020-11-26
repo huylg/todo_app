@@ -1,39 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/network/firebase_auth.dart';
-class HomePage extends StatelessWidget {
+import 'package:todo_app/repo/todo_repo.dart';
 
-    final BaseAuth auth;
+class HomePage extends StatefulWidget {
+  final BaseAuth auth;
 
-    final VoidCallback loggoutCallBack;
+  final VoidCallback loggoutCallBack;
 
-    HomePage({this.auth, this.loggoutCallBack});
+  HomePage({this.auth, this.loggoutCallBack});
 
+  @override
+  _HomePageState createState() {
+    return _HomePageState();
+  }
+}
 
-    @override
-    Widget build(BuildContext context){
+class _HomePageState extends State<HomePage> {
 
-        return Scaffold(
-                appBar: AppBar(
-                        title: Text('Flutter login demo'),
-                ),
+  bool _isLoading = true;
+  
+  TodoRepository repo;
 
-                body: Container(
-                        child: Center(
-                                child: Text('Home page'),
-                        ),
-                ),
-                floatingActionButton:  FloatingActionButton(
+  @override
+  void initState(){
 
-                        child: Icon(Icons.exit_to_app),
-                        onPressed  : () {
+    widget.auth.currentUser.then((user){
+      setState(() {
+              _isLoading = false;
+              repo = TodoRepository(user.uid);
+            });
+    });
 
-                            auth.signOut().then((_){
-                                this.loggoutCallBack();
-                            });
-                        },
-                )
-        );
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    
+    if(_isLoading){
+      return Center(child: CircularProgressIndicator(),);
     }
 
+    
+
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Flutter login demo'),
+        ),
+        body: Container(
+          child: Center(
+            child: Text('Home page'),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.exit_to_app),
+          onPressed: () {
+            widget.auth.signOut().then((_) {
+              widget.loggoutCallBack();
+            });
+          },
+        ));
+  }
 }
