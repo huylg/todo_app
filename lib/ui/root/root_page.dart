@@ -50,13 +50,13 @@ class _RootPageState extends State<RootPage> {
 
   @override
   void initState() {
-    print(widget.auth.currentUser.then((user) {
+    widget.auth.currentUser.then((user) {
       setState(() {
         status = (user == null || user.uid.isEmpty)
             ? AuthStatus.NOT_LOGGED_IN
             : AuthStatus.LOGGED_IN;
       });
-    }));
+    });
   }
 
   @override
